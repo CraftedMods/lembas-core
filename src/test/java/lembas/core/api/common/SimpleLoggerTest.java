@@ -14,43 +14,23 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package lembas.core.internal.common;
+package lembas.core.api.common;
 
-import cpw.mods.fml.common.event.*;
-import lembas.core.api.common.*;
+import org.junit.Test;
 
-/*
- * The implementation of the common proxy
- */
-public class LembasCoreCommonImpl implements LembasCoreCommon
+public class SimpleLoggerTest
 {
 
-    protected SimpleLogger logger;
-
-    public void onPreInit (FMLPreInitializationEvent event)
+    @Test(expected = NullPointerException.class)
+    public void testCreateNullName ()
     {
-        logger = new SimpleLoggerImpl (event.getModLog ());
+        SimpleLogger.create (null);
     }
 
-    public void onInit (FMLInitializationEvent event)
+    @Test(expected = NullPointerException.class)
+    public void testSetProviderNullFactory ()
     {
-
-    }
-
-    public void onPostInit (FMLPostInitializationEvent event)
-    {
-
-    }
-
-    public void onLoadingComplete (FMLLoadCompleteEvent event)
-    {
-
-    }
-
-    @Override
-    public SimpleLogger getLogger ()
-    {
-        return logger;
+        SimpleLogger.setProvider (null);
     }
 
 }
