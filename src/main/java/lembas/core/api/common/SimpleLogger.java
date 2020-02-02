@@ -20,7 +20,7 @@ import java.util.Objects;
 import java.util.function.Function;
 
 /**
- * A simple wrapper for a logger using String.format for formatting the log
+ * A simple wrapper for a logger that should use String.format for formatting the log
  * messages. The [...]Throwable functions are there to avoid bugs related to the
  * varargs.
  *
