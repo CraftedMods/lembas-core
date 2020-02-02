@@ -16,21 +16,60 @@
  ******************************************************************************/
 package lembas.core.api.common;
 
-import org.junit.Test;
+import java.util.function.Function;
+
+import org.junit.*;
 
 public class SimpleLoggerTest
 {
 
-    @Test(expected = NullPointerException.class)
-    public void testCreateNullName ()
+    private Function<String, SimpleLogger> dummyProvider;
+
+    @Before
+    public void setup ()
+    {
+        SimpleLogger.setProvider (null);
+        dummyProvider = (name) -> null; // Actually a valid provider
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testCreateNullNameWithoutProvider ()
     {
         SimpleLogger.create (null);
     }
 
-    @Test(expected = NullPointerException.class)
-    public void testSetProviderNullFactory ()
+    @Test(expected = IllegalStateException.class)
+    public void testCreateNormalNameWithoutProvider ()
+    {
+        SimpleLogger.create ("TestLogger");
+    }
+
+    @Test
+    public void testSetNullProvider ()
     {
         SimpleLogger.setProvider (null);
+        Assert.assertNull (SimpleLogger.factory);
+    }
+
+    @Test
+    public void testSetNormalProvider ()
+    {
+        SimpleLogger.setProvider (dummyProvider);
+        Assert.assertEquals (dummyProvider, SimpleLogger.factory);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testCreateNullNameWithProvider ()
+    {
+        SimpleLogger.setProvider (dummyProvider);
+        SimpleLogger.create (null);
+    }
+
+    @Test
+    public void testCreateNormalNameWithProvider ()
+    {
+        SimpleLogger.setProvider (dummyProvider);
+        Assert.assertNull (SimpleLogger.create ("TestLogger"));
     }
 
 }

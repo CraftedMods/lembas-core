@@ -20,33 +20,34 @@ import java.util.Objects;
 import java.util.function.Function;
 
 /**
- * A simple wrapper for a logger that should use String.format for formatting the log
- * messages. The [...]Throwable functions are there to avoid bugs related to the
- * varargs.
+ * A simple wrapper for a logger that should use String.format for formatting
+ * the log messages. The [...]Throwable functions are there to avoid bugs
+ * related to the varargs.
  *
  */
 public abstract class SimpleLogger
 {
 
-    private static Function<String, SimpleLogger> factory;
+    static Function<String, SimpleLogger> factory;
 
     /**
-     * Creates a logger with the supplied name. If no logging factory is set, a NPE
-     * is thrown.
+     * Creates a logger with the supplied name. If no logging factory is set, an
+     * {@link IllegalStateException} will be thrown.
      */
     public static SimpleLogger create (String name)
     {
+        if (factory == null)
+            throw new IllegalStateException ("No logger factory was set");
         Objects.requireNonNull (name);
         return factory.apply (name);
     }
 
     /**
      * Sets the provider used to create the loggers. Should only be used by service
-     * providers.
+     * providers. If null is provided as the factory, no loggers can be created.
      */
     public static void setProvider (Function<String, SimpleLogger> factory)
     {
-        Objects.requireNonNull (factory);
         SimpleLogger.factory = factory;
     }
 
